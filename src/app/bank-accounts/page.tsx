@@ -5,7 +5,12 @@ import { Typography } from '@mui/material';
 
 export async function getBankAccounts(): Promise<BankAccount[]> {
   const response = await fetch(
-    'http://host.docker.internal:3000/bank-accounts'
+    'http://host.docker.internal:3000/bank-accounts',
+    {
+      next: {
+        revalidate: 10,
+      },
+    }
   );
 
   return response.json();
