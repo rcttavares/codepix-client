@@ -2,8 +2,7 @@
 
 import { green, red } from '@mui/material/colors';
 
-import { DataGrid } from '@/components/mui/index';
-import type { GridColDef } from '@mui/x-data-grid';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { Transaction } from '@/models';
 
 const columns: GridColDef[] = [
