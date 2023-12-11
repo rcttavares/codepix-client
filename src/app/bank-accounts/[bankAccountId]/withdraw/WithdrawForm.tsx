@@ -15,34 +15,30 @@ import {
 } from '@mui/material';
 
 import { Card } from '@/components/Card';
-import { createPixKeyAction } from './create-pix-key.action';
+import { createTransactionAction } from './create-transaction.action';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export function RegisterPixKeyForm({
-  bankAccountId,
-}: {
-  bankAccountId: string;
-}) {
+export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const createPixKeyActionWithBankAccountId = createPixKeyAction.bind(
+  const createTransactionActionWithBankAccountId = createTransactionAction.bind(
     null,
     bankAccountId
   );
-
-  async function onSubmit(formData: FormData) {
-    await createPixKeyActionWithBankAccountId(formData);
-    setOpen(true);
-  }
 
   function handleClose() {
     setOpen(false);
   }
 
+  async function onSubmit(formData: FormData) {
+    await createTransactionActionWithBankAccountId(formData);
+    setOpen(true);
+  }
+
   return (
     <div>
-      <Typography variant='h5'>Cadastrar chaves pix</Typography>
+      <Typography variant='h5'>Realizar transferência</Typography>
 
       <Card>
         <form
@@ -52,7 +48,7 @@ export function RegisterPixKeyForm({
           <FormControl sx={{ mt: 2 }} required>
             <FormLabel>Escolha um tipo de chave</FormLabel>
 
-            <RadioGroup name='kind'>
+            <RadioGroup name='pix_key_kind'>
               <FormControlLabel value='cpf' control={<Radio />} label='CPF' />
 
               <FormControlLabel
@@ -63,20 +59,29 @@ export function RegisterPixKeyForm({
             </RadioGroup>
           </FormControl>
 
-          <TextField name='key' label='Digite sua chave pix' margin='normal' />
+          <TextField name='pix_key_key' label='Chave Pix' margin='normal' />
+
+          <TextField
+            name='amount'
+            label='Valor'
+            margin='normal'
+            type='number'
+          />
+
+          <TextField name='description' label='Descrição' margin='normal' />
 
           <Box display={'flex'} gap={1} mt={2}>
             <Button type='submit' variant='contained'>
-              Cadastrar
+              Concluir
             </Button>
 
             <Button
               type='button'
               variant='contained'
               color='secondary'
-              onClick={() => {
-                router.push(`/bank-accounts/${bankAccountId}/dashboard`);
-              }}
+              onClick={() =>
+                router.push(`/bank-accounts/${bankAccountId}/dashboard`)
+              }
             >
               Voltar
             </Button>
@@ -94,7 +99,7 @@ export function RegisterPixKeyForm({
         }}
       >
         <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
-          Chave pix cadastrada com sucesso!
+          Transferência realizada com sucesso!
         </Alert>
       </Snackbar>
     </div>

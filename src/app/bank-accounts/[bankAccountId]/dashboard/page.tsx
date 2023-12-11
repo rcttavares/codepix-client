@@ -1,9 +1,10 @@
+import { Link, Typography } from '@mui/material';
+
 import { CardAction } from '@/components/CardAction';
 import { CurrentBalance } from '@/components/CurrentBalance';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { MyLatestTransactions } from './MyLatestTransactions';
 import { Transaction } from '@/models';
-import { Typography } from '@mui/material';
 
 export async function getTransactions(
   bankAccountId: string
@@ -13,6 +14,7 @@ export async function getTransactions(
     {
       next: {
         revalidate: 10,
+        tags: [`bank-accounts/${bankAccountId}`],
       },
     }
   );
@@ -22,10 +24,14 @@ export async function getTransactions(
 
 export async function BankAccountDashboardPage({
   params,
+  searchParams,
 }: {
   params: { bankAccountId: string };
+  searchParams: { page: string; per_page: string };
 }) {
   const transactions = await getTransactions(params.bankAccountId);
+  const page = parseInt(searchParams.page) || 1;
+  const perPage = parseInt(searchParams.per_page) || 10;
 
   return (
     <Grid2 container spacing={2}>
@@ -37,19 +43,29 @@ export async function BankAccountDashboardPage({
 
       <Grid2 container xs={12} lg={6} spacing={1}>
         <Grid2 xs={6}>
-          <CardAction sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography component='span' color={'primary'}>
-              Transferência
-            </Typography>
-          </CardAction>
+          <Link
+            href={`/bank-accounts/${params.bankAccountId}/withdraw`}
+            style={{ textDecoration: 'none' }}
+          >
+            <CardAction sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography component='span' color={'primary'}>
+                Transferência
+              </Typography>
+            </CardAction>
+          </Link>
         </Grid2>
 
         <Grid2 xs={6}>
-          <CardAction sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography component='span' color={'primary'}>
-              Nova chave pix
-            </Typography>
-          </CardAction>
+          <Link
+            href={`/bank-accounts/${params.bankAccountId}/pix`}
+            style={{ textDecoration: 'none' }}
+          >
+            <CardAction sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography component='span' color={'primary'}>
+                Nova chave pix
+              </Typography>
+            </CardAction>
+          </Link>
         </Grid2>
       </Grid2>
 
