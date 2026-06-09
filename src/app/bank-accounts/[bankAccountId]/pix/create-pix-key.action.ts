@@ -28,7 +28,7 @@ export async function createPixKeyAction(
   }
 
   const result = await response.json();
-  revalidateTag(`pix-keys-${bankAccountId}`);
+  revalidateTag(`pix-keys-${bankAccountId}`, {});
 
   return result;
 }

@@ -32,6 +32,6 @@ export async function createTransactionAction(
   }
 
   await response.json();
-  revalidateTag(`bank-accounts/${bankAccountId}`);
+  revalidateTag(`bank-accounts/${bankAccountId}`, {});
   redirect(`/bank-accounts/${bankAccountId}/dashboard`);
 }

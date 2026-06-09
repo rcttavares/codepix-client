@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { BankAccount } from '@/models';
 import { CardAction } from '@/components/CardAction';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
