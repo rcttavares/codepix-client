@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Codepix Client
 
-## Getting Started
+Frontend for the **CodePix** system — a Pix payment application built with Next.js and Material UI.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Bank account listing
+- Per-account dashboard: current balance and latest transactions
+- Pix key registration and listing (CPF or email)
+- Pix transfers
+
+## Routes
+
+| Route | Description |
+| ----- | ----------- |
+| `/bank-accounts` | Lists all bank accounts |
+| `/bank-accounts/[id]/dashboard` | Account panel with balance and transactions |
+| `/bank-accounts/[id]/pix` | Pix key management |
+| `/bank-accounts/[id]/withdraw` | Transfer form |
+
+## Stack
+
+- [Next.js](https://nextjs.org/) 16 (App Router)
+- [TypeScript](https://www.typescriptlang.org/) 5
+- [Material UI](https://mui.com/) v5
+- [MUI X Data Grid](https://mui.com/x/react-data-grid/) v7
+
+## Prerequisites
+
+- Node.js 20+
+- Backend API running (see environment variable below)
+
+## Environment variables
+
+Create a `.env.local` file at the project root:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Local
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+### Docker
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker compose up -d
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The app is available on host port `8000` (`http://localhost:8000`).
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Command | Description |
+| ------- | ----------- |
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## API
+
+The client connects to a REST API. Endpoints used:
+
+| Method | Endpoint | Description |
+| ------ | -------- | ----------- |
+| `GET` | `/bank-accounts` | List bank accounts |
+| `GET` | `/bank-accounts/:id` | Get bank account by ID |
+| `GET` | `/bank-accounts/:id/transactions` | List account transactions |
+| `POST` | `/bank-accounts/:id/transactions` | Create a transaction (transfer) |
+| `GET` | `/bank-accounts/:id/pix-keys` | List Pix keys for account |
+| `POST` | `/bank-accounts/:id/pix-keys` | Register a Pix key |
