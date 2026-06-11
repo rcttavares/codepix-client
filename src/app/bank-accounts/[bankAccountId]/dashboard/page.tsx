@@ -10,7 +10,7 @@ export async function getTransactions(
   bankAccountId: string
 ): Promise<Transaction[]> {
   const response = await fetch(
-    `http://host.docker.internal:3000/bank-accounts/${bankAccountId}/transactions`,
+    `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/bank-accounts/${bankAccountId}/transactions`,
     {
       next: {
         revalidate: 10,
@@ -26,25 +26,27 @@ export async function BankAccountDashboardPage({
   params,
   searchParams,
 }: {
-  params: { bankAccountId: string };
-  searchParams: { page: string; per_page: string };
+  params: Promise<{ bankAccountId: string }>;
+  searchParams: Promise<{ page: string; per_page: string }>;
 }) {
-  const transactions = await getTransactions(params.bankAccountId);
-  const page = parseInt(searchParams.page) || 1;
-  const perPage = parseInt(searchParams.per_page) || 10;
+  const { bankAccountId } = await params;
+  const { page: pageParam, per_page } = await searchParams;
+  const transactions = await getTransactions(bankAccountId);
+  const page = parseInt(pageParam) || 1;
+  const perPage = parseInt(per_page) || 10;
 
   return (
     <Grid2 container spacing={2}>
       <Grid2 xs={12} lg={6}>
         <div>
-          <CurrentBalance bankAccountId={params.bankAccountId} />
+          <CurrentBalance bankAccountId={bankAccountId} />
         </div>
       </Grid2>
 
       <Grid2 container xs={12} lg={6} spacing={1}>
         <Grid2 xs={6}>
           <Link
-            href={`/bank-accounts/${params.bankAccountId}/withdraw`}
+            href={`/bank-accounts/${bankAccountId}/withdraw`}
             style={{ textDecoration: 'none' }}
           >
             <CardAction sx={{ display: 'flex', alignItems: 'center' }}>
@@ -57,7 +59,7 @@ export async function BankAccountDashboardPage({
 
         <Grid2 xs={6}>
           <Link
-            href={`/bank-accounts/${params.bankAccountId}/pix`}
+            href={`/bank-accounts/${bankAccountId}/pix`}
             style={{ textDecoration: 'none' }}
           >
             <CardAction sx={{ display: 'flex', alignItems: 'center' }}>

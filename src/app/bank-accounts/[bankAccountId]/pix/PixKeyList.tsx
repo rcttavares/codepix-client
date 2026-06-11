@@ -12,7 +12,7 @@ import StarBorder from '@mui/icons-material/StarBorder';
 
 export async function getPixKeys(bankAccountId: string): Promise<PixKey[]> {
   const response = await fetch(
-    `http://host.docker.internal:3000/bank-accounts/${bankAccountId}/pix-keys`,
+    `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/bank-accounts/${bankAccountId}/pix-keys`,
     {
       next: {
         tags: [`pix-keys-${bankAccountId}`],

@@ -12,7 +12,7 @@ export async function createTransactionAction(
   const amount = formData.get('amount');
   const description = formData.get('description');
   const response = await fetch(
-    `http://host.docker.internal:3000/bank-accounts/${bankAccountId}/transactions`,
+    `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/bank-accounts/${bankAccountId}/transactions`,
     {
       method: 'POST',
       body: JSON.stringify({

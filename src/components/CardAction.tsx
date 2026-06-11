@@ -3,10 +3,12 @@ import { Button, SxProps, Theme } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForwardIos';
 import { Card } from './Card';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 
 export type CardActionProps = {
   sx?: SxProps<Theme>;
+  href?: string;
 };
 
 export function CardAction(props: PropsWithChildren<CardActionProps>) {
@@ -24,9 +26,17 @@ export function CardAction(props: PropsWithChildren<CardActionProps>) {
           alignItems={'center'}
           justifyContent={'flex-end'}
         >
-          <Button color='primary'>
-            <ArrowForwardIcon />
-          </Button>
+          {props.href ? (
+            <Link href={props.href}>
+              <Button color='primary'>
+                <ArrowForwardIcon />
+              </Button>
+            </Link>
+          ) : (
+            <Button color='primary'>
+              <ArrowForwardIcon />
+            </Button>
+          )}
         </Grid2>
       </Grid2>
     </Card>

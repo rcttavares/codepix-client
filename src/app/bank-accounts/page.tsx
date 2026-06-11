@@ -7,7 +7,7 @@ import { Typography } from '@mui/material';
 
 export async function getBankAccounts(): Promise<BankAccount[]> {
   const response = await fetch(
-    'http://host.docker.internal:3000/bank-accounts',
+    `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/bank-accounts`,
     {
       next: {
         revalidate: 10,
@@ -28,7 +28,7 @@ export async function HomePage() {
       <Grid2 container spacing={2} mt={1}>
         {bankAccounts.map((bankAccount) => (
           <Grid2 key={bankAccount.id} xs={12} sm={6} md={4}>
-            <CardAction>
+            <CardAction href={`/bank-accounts/${bankAccount.id}/dashboard`}>
               <Typography variant='h5' component={'div'}>
                 {bankAccount.owner_name}
               </Typography>
