@@ -7,8 +7,8 @@ import type {
   Options as OptionsOfCreateCache,
 } from '@emotion/cache';
 
-import { CacheProvider as DefaultCacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
+import { CacheProvider as DefaultCacheProvider } from '@emotion/react';
 import { useServerInsertedHTML } from 'next/navigation';
 
 export type NextAppDirEmotionCacheProviderProps = {
@@ -76,7 +76,7 @@ export default function NextAppDirEmotionCacheProvider(
     inserted.forEach(({ name, isGlobal }) => {
       const style = registry.cache.inserted[name];
 
-      if (typeof style !== 'boolean') {
+      if (typeof style === 'string') {
         if (isGlobal) {
           globals.push({ name, style });
         } else {
@@ -92,14 +92,12 @@ export default function NextAppDirEmotionCacheProvider(
           <style
             key={name}
             data-emotion={`${registry.cache.key}-global ${name}`}
-            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: style }}
           />
         ))}
         {styles && (
           <style
             data-emotion={dataEmotionAttribute}
-            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: styles }}
           />
         )}
