@@ -38,24 +38,27 @@ Create a `.env.local` file at the project root:
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-## Running
+## Getting Started
 
-### Local
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Docker
+**1. Start the app container:**
 
 ```bash
 docker compose up -d
 ```
 
-The app is available on host port `8000` (`http://localhost:8000`).
+**2. Install dependencies:**
+
+```bash
+npm install
+```
+
+**3. Start the development server:**
+
+```bash
+npm run dev
+```
+
+Open the URL shown in the terminal (default: `http://localhost:3000`).
 
 ## Scripts
 

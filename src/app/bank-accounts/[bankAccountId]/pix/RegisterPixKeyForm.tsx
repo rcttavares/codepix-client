@@ -26,18 +26,24 @@ export function RegisterPixKeyForm({
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
   const createPixKeyActionWithBankAccountId = createPixKeyAction.bind(
     null,
     bankAccountId
   );
 
   async function onSubmit(formData: FormData) {
-    await createPixKeyActionWithBankAccountId(formData);
-    setOpen(true);
+    try {
+      await createPixKeyActionWithBankAccountId(formData);
+      setOpen(true);
+    } catch {
+      setError(true);
+    }
   }
 
   function handleClose() {
     setOpen(false);
+    setError(false);
   }
 
   return (
@@ -88,13 +94,21 @@ export function RegisterPixKeyForm({
         open={open}
         autoHideDuration={4000}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           Chave pix cadastrada com sucesso!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={error}
+        autoHideDuration={4000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+          Erro ao cadastrar chave pix. Tente novamente.
         </Alert>
       </Snackbar>
     </div>
