@@ -1,8 +1,7 @@
-import Box from '@mui/material/Box';
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 
 export const metadata = {
-  title: 'Codepix title',
+  title: 'CodePix',
   description: 'Codepix description',
 };
 
@@ -12,18 +11,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang='en'>
       <body>
-        <ThemeRegistry>
-          <Box
-            component='main'
-            sx={{
-              flexGrow: 1,
-              mx: ['16px', '120px'],
-              my: ['80px', '120px'],
-            }}
-          >
-            {props.children}
-          </Box>
-        </ThemeRegistry>
+        <ThemeRegistry>{props.children}</ThemeRegistry>
       </body>
     </html>
   );
