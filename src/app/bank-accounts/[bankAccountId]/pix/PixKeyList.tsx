@@ -1,14 +1,7 @@
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { List, Typography } from '@mui/material';
 
 import { PixKey } from '@/models';
-import StarBorder from '@mui/icons-material/StarBorder';
+import { PixKeyRow } from './PixKeyRow';
 
 export async function getPixKeys(bankAccountId: string): Promise<PixKey[]> {
   const response = await fetch(
@@ -36,15 +29,11 @@ export async function PixKeyList(props: PixKeyListProps) {
 
       <List>
         {pixKeys.map((pixKey) => (
-          <ListItem disablePadding key={pixKey.id}>
-            <ListItemButton>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-
-              <ListItemText primary={pixKey.key} secondary={pixKey.kind} />
-            </ListItemButton>
-          </ListItem>
+          <PixKeyRow
+            key={pixKey.id}
+            bankAccountId={props.bankAccountId}
+            pixKey={pixKey}
+          />
         ))}
       </List>
     </div>

@@ -18,6 +18,13 @@ import { Card } from '@/components/Card';
 import { createPixKeyAction } from './create-pix-key.action';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import {
+  PixKeyKind,
+  formatCpf,
+  isValidPixKey,
+  pixKeyErrorMessage,
+  pixKeyPlaceholder,
+} from '@/utils/pixKey';
 
 export function RegisterPixKeyForm({
   bankAccountId,
@@ -27,6 +34,9 @@ export function RegisterPixKeyForm({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
+  const [kind, setKind] = useState<PixKeyKind>('cpf');
+  const [key, setKey] = useState('');
+  const [keyError, setKeyError] = useState(false);
   const createPixKeyActionWithBankAccountId = createPixKeyAction.bind(
     null,
     bankAccountId
@@ -46,6 +56,25 @@ export function RegisterPixKeyForm({
     setError(false);
   }
 
+  function handleKindChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setKind(event.target.value as PixKeyKind);
+    setKey('');
+    setKeyError(false);
+  }
+
+  function handleKeyChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setKey(kind === 'cpf' ? formatCpf(event.target.value) : event.target.value);
+    setKeyError(false);
+  }
+
+  function handleKeyBlur() {
+    if (!key) {
+      return;
+    }
+
+    setKeyError(!isValidPixKey(kind, key));
+  }
+
   return (
     <div>
       <Typography variant='h5'>Cadastrar chaves pix</Typography>
@@ -58,7 +87,7 @@ export function RegisterPixKeyForm({
           <FormControl sx={{ mt: 2 }} required>
             <FormLabel>Escolha um tipo de chave</FormLabel>
 
-            <RadioGroup name='kind'>
+            <RadioGroup name='kind' value={kind} onChange={handleKindChange}>
               <FormControlLabel value='cpf' control={<Radio />} label='CPF' />
 
               <FormControlLabel
@@ -69,7 +98,23 @@ export function RegisterPixKeyForm({
             </RadioGroup>
           </FormControl>
 
-          <TextField name='key' label='Digite sua chave pix' margin='normal' />
+          <TextField
+            name='key'
+            label='Digite sua chave pix'
+            margin='normal'
+            required
+            type={kind === 'email' ? 'email' : 'text'}
+            value={key}
+            onChange={handleKeyChange}
+            onBlur={handleKeyBlur}
+            error={keyError}
+            helperText={keyError ? pixKeyErrorMessage(kind) : undefined}
+            InputLabelProps={{ shrink: true }}
+            placeholder={pixKeyPlaceholder(kind)}
+            inputProps={
+              kind === 'cpf' ? { inputMode: 'numeric', maxLength: 14 } : undefined
+            }
+          />
 
           <Box display={'flex'} gap={1} mt={2}>
             <Button type='submit' variant='contained'>

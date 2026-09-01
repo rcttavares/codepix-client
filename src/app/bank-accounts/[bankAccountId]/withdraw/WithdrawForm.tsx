@@ -7,6 +7,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  InputAdornment,
   Radio,
   RadioGroup,
   Snackbar,
@@ -15,13 +16,40 @@ import {
 } from '@mui/material';
 
 import { Card } from '@/components/Card';
-import { createTransactionAction } from './create-transaction.action';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { createTransactionAction } from './create-transaction.action';
+import {
+  PixKeyKind,
+  formatCpf,
+  isValidPixKey,
+  pixKeyErrorMessage,
+  pixKeyPlaceholder,
+} from '@/utils/pixKey';
+
+function formatAmount(digits: string) {
+  const cleanDigits = digits.replace(/\D/g, '').slice(0, 12);
+
+  if (!cleanDigits) {
+    return { display: '', numeric: '' };
+  }
+
+  const numeric = (Number(cleanDigits) / 100).toFixed(2);
+  const [integerPart, decimalPart] = numeric.split('.');
+  const display = `${integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},${decimalPart}`;
+
+  return { display, numeric };
+}
 
 export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [pixKeyKind, setPixKeyKind] = useState<PixKeyKind>('cpf');
+  const [pixKey, setPixKey] = useState('');
+  const [pixKeyError, setPixKeyError] = useState(false);
+  const [amountDisplay, setAmountDisplay] = useState('');
+  const [amountValue, setAmountValue] = useState('');
+
   const createTransactionActionWithBankAccountId = createTransactionAction.bind(
     null,
     bankAccountId
@@ -29,6 +57,35 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
 
   function handleClose() {
     setOpen(false);
+  }
+
+  function handlePixKeyKindChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPixKeyKind(event.target.value as PixKeyKind);
+    setPixKey('');
+    setPixKeyError(false);
+  }
+
+  function handlePixKeyChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPixKey(
+      pixKeyKind === 'cpf'
+        ? formatCpf(event.target.value)
+        : event.target.value
+    );
+    setPixKeyError(false);
+  }
+
+  function handlePixKeyBlur() {
+    if (!pixKey) {
+      return;
+    }
+
+    setPixKeyError(!isValidPixKey(pixKeyKind, pixKey));
+  }
+
+  function handleAmountChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { display, numeric } = formatAmount(event.target.value);
+    setAmountDisplay(display);
+    setAmountValue(numeric);
   }
 
   async function onSubmit(formData: FormData) {
@@ -48,7 +105,11 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
           <FormControl sx={{ mt: 2 }} required>
             <FormLabel>Escolha um tipo de chave</FormLabel>
 
-            <RadioGroup name='pix_key_kind'>
+            <RadioGroup
+              name='pix_key_kind'
+              value={pixKeyKind}
+              onChange={handlePixKeyKindChange}
+            >
               <FormControlLabel value='cpf' control={<Radio />} label='CPF' />
 
               <FormControlLabel
@@ -59,14 +120,40 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
             </RadioGroup>
           </FormControl>
 
-          <TextField name='pix_key_key' label='Chave Pix' margin='normal' />
+          <TextField
+            name='pix_key_key'
+            label='Chave Pix'
+            margin='normal'
+            required
+            type={pixKeyKind === 'email' ? 'email' : 'text'}
+            value={pixKey}
+            onChange={handlePixKeyChange}
+            InputLabelProps={{ shrink: true }}
+            placeholder={pixKeyPlaceholder(pixKeyKind)}
+            onBlur={handlePixKeyBlur}
+            error={pixKeyError}
+            helperText={pixKeyError ? pixKeyErrorMessage(pixKeyKind) : undefined}
+            inputProps={
+              pixKeyKind === 'cpf'
+                ? { inputMode: 'numeric', maxLength: 14 }
+                : undefined
+            }
+          />
 
           <TextField
-            name='amount'
             label='Valor'
             margin='normal'
-            type='number'
+            required
+            value={amountDisplay}
+            onChange={handleAmountChange}
+            placeholder='0,00'
+            inputProps={{ inputMode: 'numeric' }}
+            InputProps={{
+              startAdornment: <InputAdornment position='start'>R$</InputAdornment>,
+            }}
           />
+
+          <input type='hidden' name='amount' value={amountValue} />
 
           <TextField name='description' label='Descrição' margin='normal' />
 
