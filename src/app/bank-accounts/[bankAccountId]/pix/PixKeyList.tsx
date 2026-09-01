@@ -1,7 +1,7 @@
-import { Typography } from '@mui/material';
+import { List, Typography } from '@mui/material';
 
 import { PixKey } from '@/models';
-import { PixKeyListView } from './PixKeyListView';
+import { PixKeyRow } from './PixKeyRow';
 
 export async function getPixKeys(bankAccountId: string): Promise<PixKey[]> {
   const response = await fetch(
@@ -27,7 +27,15 @@ export async function PixKeyList(props: PixKeyListProps) {
     <div>
       <Typography variant='h5'>Minhas chaves pix</Typography>
 
-      <PixKeyListView bankAccountId={props.bankAccountId} pixKeys={pixKeys} />
+      <List>
+        {pixKeys.map((pixKey) => (
+          <PixKeyRow
+            key={pixKey.id}
+            bankAccountId={props.bankAccountId}
+            pixKey={pixKey}
+          />
+        ))}
+      </List>
     </div>
   );
 }

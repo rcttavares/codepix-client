@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -13,27 +12,24 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Snackbar,
 } from '@mui/material';
 import DeleteOutline from '@mui/icons-material/DeleteOutline';
 import StarBorder from '@mui/icons-material/StarBorder';
 
 import { PixKey } from '@/models';
 import { deletePixKeyAction } from './delete-pix-key.action';
+import { toast } from 'react-toastify';
 import { useState } from 'react';
 
 export function PixKeyRow({
   bankAccountId,
   pixKey,
-  onDeleted,
 }: {
   bankAccountId: string;
   pixKey: PixKey;
-  onDeleted?: () => void;
 }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [error, setError] = useState(false);
 
   async function handleDelete() {
     setDeleting(true);
@@ -41,9 +37,9 @@ export function PixKeyRow({
     try {
       await deletePixKeyAction(bankAccountId, pixKey.id);
       setConfirmOpen(false);
-      onDeleted?.();
+      toast.success('Chave pix removida com sucesso!');
     } catch {
-      setError(true);
+      toast.error('Erro ao excluir chave pix. Tente novamente.');
     } finally {
       setDeleting(false);
     }
@@ -97,21 +93,6 @@ export function PixKeyRow({
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={error}
-        autoHideDuration={4000}
-        onClose={() => setError(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert
-          onClose={() => setError(false)}
-          severity='error'
-          sx={{ width: '100%' }}
-        >
-          Erro ao excluir chave pix. Tente novamente.
-        </Alert>
-      </Snackbar>
     </>
   );
 }

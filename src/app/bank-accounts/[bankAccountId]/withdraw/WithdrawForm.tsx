@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Alert,
   Box,
   Button,
   FormControl,
@@ -10,14 +9,14 @@ import {
   InputAdornment,
   Radio,
   RadioGroup,
-  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
 
 import { Card } from '@/components/Card';
-import { useRouter } from 'next/navigation';
+import { unstable_rethrow, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { createTransactionAction } from './create-transaction.action';
 import {
   PixKeyKind,
@@ -43,7 +42,6 @@ function formatAmount(digits: string) {
 
 export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [pixKeyKind, setPixKeyKind] = useState<PixKeyKind>('cpf');
   const [pixKey, setPixKey] = useState('');
   const [pixKeyError, setPixKeyError] = useState(false);
@@ -54,10 +52,6 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
     null,
     bankAccountId
   );
-
-  function handleClose() {
-    setOpen(false);
-  }
 
   function handlePixKeyKindChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPixKeyKind(event.target.value as PixKeyKind);
@@ -89,8 +83,12 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
   }
 
   async function onSubmit(formData: FormData) {
-    await createTransactionActionWithBankAccountId(formData);
-    setOpen(true);
+    try {
+      await createTransactionActionWithBankAccountId(formData);
+    } catch (err) {
+      unstable_rethrow(err);
+      toast.error('Erro ao realizar transferência. Tente novamente.');
+    }
   }
 
   return (
@@ -175,20 +173,6 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
           </Box>
         </form>
       </Card>
-
-      <Snackbar
-        open={open}
-        autoHideDuration={4000}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
-          Transferência realizada com sucesso!
-        </Alert>
-      </Snackbar>
     </div>
   );
 }
