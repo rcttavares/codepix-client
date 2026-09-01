@@ -13,8 +13,8 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
+import ContentCopy from '@mui/icons-material/ContentCopy';
 import DeleteOutline from '@mui/icons-material/DeleteOutline';
-import StarBorder from '@mui/icons-material/StarBorder';
 
 import { PixKey } from '@/models';
 import { deletePixKeyAction } from './delete-pix-key.action';
@@ -32,6 +32,15 @@ export function PixKeyRow({
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(pixKey.key);
+      toast.success('Chave pix copiada!');
+    } catch {
+      toast.error('Não foi possível copiar a chave pix.');
+    }
+  }
 
   async function handleDelete() {
     setDeleting(true);
@@ -62,9 +71,9 @@ export function PixKeyRow({
           </IconButton>
         }
       >
-        <ListItemButton sx={{ pr: 6 }}>
+        <ListItemButton sx={{ pr: 6 }} onClick={handleCopy}>
           <ListItemIcon>
-            <StarBorder />
+            <ContentCopy />
           </ListItemIcon>
 
           <ListItemText primary={pixKey.key} secondary={pixKey.kind} />
