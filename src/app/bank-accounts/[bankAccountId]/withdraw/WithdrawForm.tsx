@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import { Card } from '@/components/Card';
-import { unstable_rethrow, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { createTransactionAction } from './create-transaction.action';
@@ -85,8 +85,10 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
   async function onSubmit(formData: FormData) {
     try {
       await createTransactionActionWithBankAccountId(formData);
-    } catch (err) {
-      unstable_rethrow(err);
+      toast.success('Transferência realizada com sucesso!');
+      router.push(`/bank-accounts/${bankAccountId}/dashboard`);
+      router.refresh();
+    } catch {
       toast.error('Erro ao realizar transferência. Tente novamente.');
     }
   }

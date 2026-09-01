@@ -1,6 +1,5 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 
 export async function createTransactionAction(
@@ -33,5 +32,4 @@ export async function createTransactionAction(
 
   await response.json();
   revalidateTag(`bank-accounts/${bankAccountId}`, {});
-  redirect(`/bank-accounts/${bankAccountId}/dashboard`);
 }
