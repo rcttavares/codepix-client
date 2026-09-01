@@ -43,6 +43,7 @@ export function RegisterPixKeyForm({
     try {
       await createPixKeyActionWithBankAccountId(formData);
       toast.success('Chave pix cadastrada com sucesso!');
+      router.refresh();
     } catch {
       toast.error('Erro ao cadastrar chave pix. Tente novamente.');
     }
