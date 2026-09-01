@@ -25,9 +25,11 @@ import { useState } from 'react';
 export function PixKeyRow({
   bankAccountId,
   pixKey,
+  onDeleted,
 }: {
   bankAccountId: string;
   pixKey: PixKey;
+  onDeleted?: () => void;
 }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -39,6 +41,7 @@ export function PixKeyRow({
     try {
       await deletePixKeyAction(bankAccountId, pixKey.id);
       setConfirmOpen(false);
+      onDeleted?.();
     } catch {
       setError(true);
     } finally {
