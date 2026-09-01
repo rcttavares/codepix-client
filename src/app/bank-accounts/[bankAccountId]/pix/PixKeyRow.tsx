@@ -19,6 +19,7 @@ import StarBorder from '@mui/icons-material/StarBorder';
 import { PixKey } from '@/models';
 import { deletePixKeyAction } from './delete-pix-key.action';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export function PixKeyRow({
@@ -28,6 +29,7 @@ export function PixKeyRow({
   bankAccountId: string;
   pixKey: PixKey;
 }) {
+  const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -38,6 +40,7 @@ export function PixKeyRow({
       await deletePixKeyAction(bankAccountId, pixKey.id);
       setConfirmOpen(false);
       toast.success('Chave pix removida com sucesso!');
+      router.refresh();
     } catch {
       toast.error('Erro ao excluir chave pix. Tente novamente.');
     } finally {
