@@ -24,16 +24,11 @@ export async function getTransactions(
 
 export async function BankAccountDashboardPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ bankAccountId: string }>;
-  searchParams: Promise<{ page: string; per_page: string }>;
 }) {
   const { bankAccountId } = await params;
-  const { page: pageParam, per_page } = await searchParams;
   const transactions = await getTransactions(bankAccountId);
-  const page = parseInt(pageParam) || 1;
-  const perPage = parseInt(per_page) || 10;
 
   return (
     <Grid2 container spacing={2}>
