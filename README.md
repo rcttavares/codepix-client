@@ -36,8 +36,10 @@ Frontend for the **CodePix** system — a Pix payment application built with Nex
 Create a `.env.local` file at the project root:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://host.docker.internal:3000
 ```
+
+The app runs inside a container, so `localhost` refers to the container itself. Use `host.docker.internal` to reach the API running on the host machine.
 
 ## Getting Started
 
@@ -59,7 +61,7 @@ npm install
 npm run dev
 ```
 
-Open the URL shown in the terminal (default: `http://localhost:3000`).
+Open `http://localhost:8000` in your browser (port `3000` of the container is mapped to `8000` on the host).
 
 ## Scripts
 
