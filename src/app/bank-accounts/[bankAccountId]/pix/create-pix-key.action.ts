@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 
 export async function createPixKeyAction(
   bankAccountId: string,
-  formData: FormData
+  formData: FormData,
 ) {
   const pixKeyKind = formData.get('kind');
   const pixKeyKey = formData.get('key');
@@ -20,7 +20,7 @@ export async function createPixKeyAction(
       headers: {
         'Content-Type': 'application/json',
       },
-    }
+    },
   );
 
   if (!response.ok) {

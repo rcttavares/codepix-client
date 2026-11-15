@@ -1,15 +1,13 @@
 'use client';
 
-import * as React from 'react';
-
 import type {
   EmotionCache,
   Options as OptionsOfCreateCache,
 } from '@emotion/cache';
-
 import createCache from '@emotion/cache';
 import { CacheProvider as DefaultCacheProvider } from '@emotion/react';
 import { useServerInsertedHTML } from 'next/navigation';
+import * as React from 'react';
 
 export type NextAppDirEmotionCacheProviderProps = {
   /** This is the options passed to createCache() from 'import createCache from "@emotion/cache"' */
@@ -25,7 +23,7 @@ export type NextAppDirEmotionCacheProviderProps = {
 
 // Adapted from https://github.com/garronej/tss-react/blob/main/src/next/appDir.tsx
 export default function NextAppDirEmotionCacheProvider(
-  props: NextAppDirEmotionCacheProviderProps
+  props: NextAppDirEmotionCacheProviderProps,
 ) {
   const { options, CacheProvider = DefaultCacheProvider, children } = props;
 
@@ -92,12 +90,14 @@ export default function NextAppDirEmotionCacheProvider(
           <style
             key={name}
             data-emotion={`${registry.cache.key}-global ${name}`}
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: CSS gerado pelo Emotion no SSR (padrão do MUI para App Router)
             dangerouslySetInnerHTML={{ __html: style }}
           />
         ))}
         {styles && (
           <style
             data-emotion={dataEmotionAttribute}
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: CSS gerado pelo Emotion no SSR (padrão do MUI para App Router)
             dangerouslySetInnerHTML={{ __html: styles }}
           />
         )}

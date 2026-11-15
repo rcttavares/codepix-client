@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 
 export async function createTransactionAction(
   bankAccountId: string,
-  formData: FormData
+  formData: FormData,
 ) {
   const pixKeyKind = formData.get('pix_key_kind');
   const pixKeyKey = formData.get('pix_key_key');
@@ -23,7 +23,7 @@ export async function createTransactionAction(
       headers: {
         'Content-Type': 'application/json',
       },
-    }
+    },
   );
 
   if (!response.ok) {

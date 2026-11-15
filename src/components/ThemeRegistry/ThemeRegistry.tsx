@@ -1,10 +1,9 @@
 'use client';
 
-import * as React from 'react';
-
 import CssBaseline from '@mui/material/CssBaseline'; //melhoramento de html, body
-import NextAppDirEmotionCacheProvider from './EmotionCache';
 import { ThemeProvider } from '@mui/material/styles';
+import type * as React from 'react';
+import NextAppDirEmotionCacheProvider from './EmotionCache';
 import theme from './theme';
 
 export default function ThemeRegistry({

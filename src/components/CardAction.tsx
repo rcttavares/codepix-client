@@ -1,10 +1,9 @@
-import { Button, SxProps, Theme } from '@mui/material';
-
 import ArrowForwardIcon from '@mui/icons-material/ArrowForwardIos';
-import { Card } from './Card';
+import { Button, type SxProps, type Theme } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import Link from 'next/link';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import { Card } from './Card';
 
 export type CardActionProps = {
   sx?: SxProps<Theme>;

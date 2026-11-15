@@ -12,19 +12,18 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-
-import { Card } from '@/components/Card';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { createTransactionAction } from './create-transaction.action';
+import { Card } from '@/components/Card';
 import {
-  PixKeyKind,
   formatCpf,
   isValidPixKey,
+  type PixKeyKind,
   pixKeyErrorMessage,
   pixKeyPlaceholder,
 } from '@/utils/pixKey';
+import { createTransactionAction } from './create-transaction.action';
 
 function formatAmount(digits: string) {
   const cleanDigits = digits.replace(/\D/g, '').slice(0, 12);
@@ -50,7 +49,7 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
 
   const createTransactionActionWithBankAccountId = createTransactionAction.bind(
     null,
-    bankAccountId
+    bankAccountId,
   );
 
   function handlePixKeyKindChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -61,9 +60,7 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
 
   function handlePixKeyChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPixKey(
-      pixKeyKind === 'cpf'
-        ? formatCpf(event.target.value)
-        : event.target.value
+      pixKeyKind === 'cpf' ? formatCpf(event.target.value) : event.target.value,
     );
     setPixKeyError(false);
   }
@@ -132,7 +129,9 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
             placeholder={pixKeyPlaceholder(pixKeyKind)}
             onBlur={handlePixKeyBlur}
             error={pixKeyError}
-            helperText={pixKeyError ? pixKeyErrorMessage(pixKeyKind) : undefined}
+            helperText={
+              pixKeyError ? pixKeyErrorMessage(pixKeyKind) : undefined
+            }
             inputProps={
               pixKeyKind === 'cpf'
                 ? { inputMode: 'numeric', maxLength: 14 }
@@ -149,7 +148,9 @@ export function WithdrawForm({ bankAccountId }: { bankAccountId: string }) {
             placeholder='0,00'
             inputProps={{ inputMode: 'numeric' }}
             InputProps={{
-              startAdornment: <InputAdornment position='start'>R$</InputAdornment>,
+              startAdornment: (
+                <InputAdornment position='start'>R$</InputAdornment>
+              ),
             }}
           />
 

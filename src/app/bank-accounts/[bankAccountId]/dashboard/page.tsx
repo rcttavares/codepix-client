@@ -1,13 +1,12 @@
 import { Link, Typography } from '@mui/material';
-
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CardAction } from '@/components/CardAction';
 import { CurrentBalance } from '@/components/CurrentBalance';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import type { Transaction } from '@/models';
 import { MyLatestTransactions } from './MyLatestTransactions';
-import { Transaction } from '@/models';
 
 export async function getTransactions(
-  bankAccountId: string
+  bankAccountId: string,
 ): Promise<Transaction[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/bank-accounts/${bankAccountId}/transactions`,
@@ -16,7 +15,7 @@ export async function getTransactions(
         revalidate: 10,
         tags: [`bank-accounts/${bankAccountId}`],
       },
-    }
+    },
   );
 
   return response.json();

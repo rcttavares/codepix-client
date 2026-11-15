@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 export function PageContainer(props: PropsWithChildren) {
   return (

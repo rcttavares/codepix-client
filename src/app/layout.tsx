@@ -1,5 +1,5 @@
-import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 import { ToastContainer } from 'react-toastify';
+import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {

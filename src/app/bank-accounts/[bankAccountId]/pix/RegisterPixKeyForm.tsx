@@ -11,19 +11,18 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-
-import { Card } from '@/components/Card';
-import { createPixKeyAction } from './create-pix-key.action';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { Card } from '@/components/Card';
 import {
-  PixKeyKind,
   formatCpf,
   isValidPixKey,
+  type PixKeyKind,
   pixKeyErrorMessage,
   pixKeyPlaceholder,
 } from '@/utils/pixKey';
+import { createPixKeyAction } from './create-pix-key.action';
 
 export function RegisterPixKeyForm({
   bankAccountId,
@@ -36,7 +35,7 @@ export function RegisterPixKeyForm({
   const [keyError, setKeyError] = useState(false);
   const createPixKeyActionWithBankAccountId = createPixKeyAction.bind(
     null,
-    bankAccountId
+    bankAccountId,
   );
 
   async function onSubmit(formData: FormData) {
@@ -105,7 +104,9 @@ export function RegisterPixKeyForm({
             InputLabelProps={{ shrink: true }}
             placeholder={pixKeyPlaceholder(kind)}
             inputProps={
-              kind === 'cpf' ? { inputMode: 'numeric', maxLength: 14 } : undefined
+              kind === 'cpf'
+                ? { inputMode: 'numeric', maxLength: 14 }
+                : undefined
             }
           />
 

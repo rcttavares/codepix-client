@@ -1,6 +1,6 @@
 import { List, Typography } from '@mui/material';
 
-import { PixKey } from '@/models';
+import type { PixKey } from '@/models';
 import { PixKeyRow } from './PixKeyRow';
 
 export async function getPixKeys(bankAccountId: string): Promise<PixKey[]> {
@@ -10,7 +10,7 @@ export async function getPixKeys(bankAccountId: string): Promise<PixKey[]> {
       next: {
         tags: [`pix-keys-${bankAccountId}`],
       },
-    }
+    },
   );
 
   return response.json();

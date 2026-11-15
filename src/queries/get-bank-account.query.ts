@@ -1,7 +1,7 @@
-import { BankAccount } from '@/models';
+import type { BankAccount } from '@/models';
 
 export async function getBankAccount(
-  bankAccountId: string
+  bankAccountId: string,
 ): Promise<BankAccount> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/bank-accounts/${bankAccountId}`,
@@ -10,7 +10,7 @@ export async function getBankAccount(
         revalidate: 20,
         tags: [`bank-accounts/${bankAccountId}`],
       },
-    }
+    },
   );
 
   return response.json();

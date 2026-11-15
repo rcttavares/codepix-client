@@ -24,6 +24,7 @@ Frontend for the **CodePix** system — a Pix payment application built with Nex
 - [TypeScript](https://www.typescriptlang.org/) 5
 - [Material UI](https://mui.com/) v5
 - [MUI X Data Grid](https://mui.com/x/react-data-grid/) v7
+- [Biome](https://biomejs.dev/) (lint and formatting)
 
 ## Prerequisites
 
@@ -67,7 +68,7 @@ Open the URL shown in the terminal (default: `http://localhost:3000`).
 | `npm run dev` | Start development server |
 | `npm run build` | Production build |
 | `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
+| `npm run check` | Run Biome lint, formatting and import sorting, applying fixes |
 
 ## API
 

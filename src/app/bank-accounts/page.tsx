@@ -1,11 +1,11 @@
 export const dynamic = 'force-dynamic';
 
-import { BankAccount } from '@/models';
+import { Typography } from '@mui/material';
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CardAction } from '@/components/CardAction';
 import { Header } from '@/components/Header';
 import { PageContainer } from '@/components/PageContainer';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import { Typography } from '@mui/material';
+import type { BankAccount } from '@/models';
 
 export async function getBankAccounts(): Promise<BankAccount[]> {
   const response = await fetch(
@@ -14,7 +14,7 @@ export async function getBankAccounts(): Promise<BankAccount[]> {
       next: {
         revalidate: 10,
       },
-    }
+    },
   );
 
   return response.json();

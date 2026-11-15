@@ -1,5 +1,7 @@
 'use client';
 
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
 import {
   Button,
   Dialog,
@@ -13,14 +15,11 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import ContentCopy from '@mui/icons-material/ContentCopy';
-import DeleteOutline from '@mui/icons-material/DeleteOutline';
-
-import { PixKey } from '@/models';
-import { deletePixKeyAction } from './delete-pix-key.action';
-import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import type { PixKey } from '@/models';
+import { deletePixKeyAction } from './delete-pix-key.action';
 
 export function PixKeyRow({
   bankAccountId,
